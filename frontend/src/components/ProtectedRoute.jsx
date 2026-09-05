@@ -1,6 +1,17 @@
-// import axiosInstance from "../AxiosCalls/axios.js"
+import { useAuth } from "../context/AuthContext";
+import { Navigate } from "react-router-dom";
 
-// const ProtectedRoute = () => {
-//   return children
+const ProtectedRoute = ({ children }) => {
+  const { user, loading } = useAuth();
 
-// export default ProtectedRoute
+  if (loading) {
+    <div>Loading...</div>;
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+};
+
+export default ProtectedRoute;
