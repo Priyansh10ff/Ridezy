@@ -38,6 +38,7 @@ export const registerUser = async (req, res) => {
       email,
       phone,
       password: hashedPassword,
+      role : "rider"
     });
 
     const token = generateToken(newUser._id);
@@ -165,20 +166,8 @@ export const changePassword = async (req, res) => {
     return res.status(200).json({
       message: "Password changed successfully",
     });
-  } catch (error) {}
-  return res.status(500).json({
-    message: "Internal server error",
-    error: error.message,
-  });
-};
-
-export const getUser = async (req, res) => {
-  try {
-    return res.status(200).json({
-      message: "User fetched successfully",
-      user: req.user,
-    });
   } catch (error) {
+    console.error("Change password error:", error);
     return res.status(500).json({
       message: "Internal server error",
       error: error.message,
@@ -186,5 +175,26 @@ export const getUser = async (req, res) => {
   }
 };
 
-//jwt and hashing need to be added
+export const getUser = async (req, res) => {
+  try {
+    const user = req.user;
+
+    return res.status(200).json({
+      message: "User fetched successfully.",
+      user: {
+        id: user._id,
+        fullname: user.fullname,
+        email: user.email,
+        phone: user.phone,
+      },
+    });
+  } catch (error) {
+    console.error("Get user error:", error);
+
+    return res.status(500).json({
+      message: "Internal server error.",
+    });
+  }
+};
+
 //chamge password logic to be added
