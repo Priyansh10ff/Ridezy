@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../AxiosCalls/axios";
+import { useAuth } from "../context/AuthContext.jsx";
 
 function Register() {
   const navigate = useNavigate();
+  const { setUser } = useAuth();
 
   const [form, setForm] = useState({
     firstname: "",
@@ -36,7 +38,7 @@ function Register() {
       );
 
       console.log(response.data);
-
+      setUser(response.data.user);
       navigate("/dashboard");
     } catch (error) {
       setError(

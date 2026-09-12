@@ -32,8 +32,8 @@ export const registerUser = async (req, res) => {
 
     const newUser = await user.create({
       fullname: {
-        firstname,
-        lastname,
+        firstname : firstname.trim(),
+        lastname : lastname?.trim(),
       },
       email,
       phone,
@@ -54,6 +54,7 @@ export const registerUser = async (req, res) => {
         fullname: newUser.fullname,
         email: newUser.email,
         phone: newUser.phone,
+        role: newUser.role,
       },
     });
   } catch (error) {
@@ -106,6 +107,7 @@ export const loginUser = async (req, res) => {
         fullname: existingUser.fullname,
         email: existingUser.email,
         phone: existingUser.phone,
+        role : existingUser.role
       },
     });
   } catch (error) {

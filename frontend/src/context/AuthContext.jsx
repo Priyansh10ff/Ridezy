@@ -8,9 +8,9 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   const getUser = async () => {
-    const response = await axiosInstance.post("/users/me");
-    setUser(response.data.user);
     try {
+      const response = await axiosInstance.get("/users/me");
+      setUser(response.data.user);
     } catch (error) {
       setUser(null);
     } finally {
@@ -32,7 +32,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, loading, setLoading }}>
+    <AuthContext.Provider
+      value={{ user, setUser, loading, setLoading, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

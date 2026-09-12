@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../AxiosCalls/axios";
+import { useAuth } from "../context/AuthContext.jsx";
 
 function Login() {
   const navigate = useNavigate();
+  const { setUser } = useAuth();
 
   const [form, setForm] = useState({
     email: "",
@@ -31,7 +33,7 @@ function Login() {
         "/users/login",
         form
       );
-
+      setUser(response.data.user);
       console.log(response.data);
 
       navigate("/dashboard");
