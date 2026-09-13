@@ -10,8 +10,8 @@ import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <AuthProvider>
         <Routes>
           <Route
             path="/"
@@ -46,8 +46,8 @@ function App() {
             }
           />
         </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 

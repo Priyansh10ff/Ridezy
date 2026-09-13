@@ -5,10 +5,26 @@ import generateToken from "../utils/generateToken.js";
 export const registerUser = async (req, res) => {
   try {
     const { firstname, lastname, email, phone, password } = req.body;
+    const trimmedFirstname = firstname?.trim();
+    const trimmedLastname = lastname?.trim();
+    const normalizedEmail = email?.trim().toLowerCase();
+    const trimmedPhone = phone?.trim();
 
-    if (!firstname || !email || !phone || !password) {
+    if (!trimmedFirstname || !normalizedEmail || !trimmedPhone || !password) {
       return res.status(400).json({
         message: "All fields are required",
+      });
+    }
+
+    if (trimmedFirstname.length < 3) {
+      return res.status(400).json({
+        message: "First name must be at least 3 characters long",
+      });
+    }
+
+    if (trimmedLastname && trimmedLastname.length < 3) {
+      return res.status(400).json({
+        message: "Last name must be at least 3 characters long",
       });
     }
 
@@ -19,7 +35,7 @@ export const registerUser = async (req, res) => {
     }
 
     const existingUser = await user.findOne({
-      $or: [{ email }, { phone }],
+      $or: [{ email: normalizedEmail }, { phone: trimmedPhone }],
     });
 
     if (existingUser) {
@@ -32,13 +48,13 @@ export const registerUser = async (req, res) => {
 
     const newUser = await user.create({
       fullname: {
-        firstname : firstname.trim(),
-        lastname : lastname?.trim(),
+        firstname: trimmedFirstname,
+        ...(trimmedLastname ? { lastname: trimmedLastname } : {}),
       },
-      email,
-      phone,
+      email: normalizedEmail,
+      phone: trimmedPhone,
       password: hashedPassword,
-      role : "rider"
+      role: "rider",
     });
 
     const token = generateToken(newUser._id);
@@ -75,7 +91,7 @@ export const loginUser = async (req, res) => {
       });
     }
 
-    const existingUser = await user.findOne({ email });
+    const existingUser = await user.findOne({ email: email.trim().toLowerCase() });
 
     if (!existingUser) {
       return res.status(401).json({
@@ -107,7 +123,7 @@ export const loginUser = async (req, res) => {
         fullname: existingUser.fullname,
         email: existingUser.email,
         phone: existingUser.phone,
-        role : existingUser.role
+        role: existingUser.role,
       },
     });
   } catch (error) {

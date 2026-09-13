@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useEffectEvent, useState } from "react";
 import axiosInstance from "../AxiosCalls/axios.js";
 
 const AuthContext = createContext();
@@ -7,18 +7,20 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const getUser = async () => {
+  const getUser = useEffectEvent(async () => {
     try {
       const response = await axiosInstance.get("/users/me");
       setUser(response.data.user);
-    } catch (error) {
+    } catch {
       setUser(null);
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   useEffect(() => {
+    // The initial auth request must update context state when it completes.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     getUser();
   }, []);
 
@@ -40,6 +42,9 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
+// The provider and its hook intentionally live together in this context module.
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => {
   return useContext(AuthContext);
 };
+

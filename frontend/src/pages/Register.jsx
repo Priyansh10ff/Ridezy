@@ -32,10 +32,7 @@ function Register() {
     setLoading(true);
 
     try {
-      const response = await axiosInstance.post(
-        "/users/register",
-        form
-      );
+      const response = await axiosInstance.post("/users/register", form);
 
       console.log(response.data);
       setUser(response.data.user);
@@ -43,7 +40,7 @@ function Register() {
     } catch (error) {
       setError(
         error.response?.data?.message ||
-          "Something went wrong. Please try again."
+          "Something went wrong. Please try again.",
       );
     } finally {
       setLoading(false);
@@ -52,7 +49,6 @@ function Register() {
 
   return (
     <div className="min-h-screen bg-white">
-
       {/* Navbar */}
       <nav className="flex items-center justify-between px-8 py-5">
         <Link to="/" className="text-2xl font-bold">
@@ -70,17 +66,11 @@ function Register() {
       {/* Register Form */}
       <div className="flex min-h-[80vh] items-center justify-center px-6">
         <div className="w-full max-w-md">
+          <h1 className="text-4xl font-bold">Create your account</h1>
 
-          <h1 className="text-4xl font-bold">
-            Create your account
-          </h1>
-
-          <p className="mt-2 text-gray-600">
-            Join Ridezy and start riding.
-          </p>
+          <p className="mt-2 text-gray-600">Join Ridezy and start riding.</p>
 
           <form onSubmit={handleSubmit} className="mt-8">
-
             {/* First Name */}
             <div>
               <label className="mb-2 block text-sm font-medium">
@@ -93,6 +83,8 @@ function Register() {
                 value={form.firstname}
                 onChange={handleChange}
                 placeholder="Enter your first name"
+                required
+                minLength={3}
                 className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-black"
               />
             </div>
@@ -109,15 +101,14 @@ function Register() {
                 value={form.lastname}
                 onChange={handleChange}
                 placeholder="Enter your last name"
+                minLength={3}
                 className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-black"
               />
             </div>
 
             {/* Email */}
             <div className="mt-5">
-              <label className="mb-2 block text-sm font-medium">
-                Email
-              </label>
+              <label className="mb-2 block text-sm font-medium">Email</label>
 
               <input
                 type="email"
@@ -125,15 +116,14 @@ function Register() {
                 value={form.email}
                 onChange={handleChange}
                 placeholder="Enter your email"
+                required
                 className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-black"
               />
             </div>
 
             {/* Phone */}
             <div className="mt-5">
-              <label className="mb-2 block text-sm font-medium">
-                Phone
-              </label>
+              <label className="mb-2 block text-sm font-medium">Phone</label>
 
               <input
                 type="tel"
@@ -141,15 +131,14 @@ function Register() {
                 value={form.phone}
                 onChange={handleChange}
                 placeholder="Enter your phone number"
+                required
                 className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-black"
               />
             </div>
 
             {/* Password */}
             <div className="mt-5">
-              <label className="mb-2 block text-sm font-medium">
-                Password
-              </label>
+              <label className="mb-2 block text-sm font-medium">Password</label>
 
               <input
                 type="password"
@@ -157,6 +146,7 @@ function Register() {
                 value={form.password}
                 onChange={handleChange}
                 placeholder="Create a password"
+                required
                 className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-black"
               />
 
@@ -166,11 +156,7 @@ function Register() {
             </div>
 
             {/* Error */}
-            {error && (
-              <p className="mt-4 text-sm text-red-600">
-                {error}
-              </p>
-            )}
+            {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
 
             {/* Submit */}
             <button
@@ -180,23 +166,17 @@ function Register() {
             >
               {loading ? "Creating account..." : "Create account"}
             </button>
-
           </form>
 
           {/* Login Link */}
           <p className="mt-6 text-center text-sm text-gray-600">
             Already have an account?{" "}
-            <Link
-              to="/login"
-              className="font-semibold text-black"
-            >
+            <Link to="/login" className="font-semibold text-black">
               Login
             </Link>
           </p>
-
         </div>
       </div>
-
     </div>
   );
 }
