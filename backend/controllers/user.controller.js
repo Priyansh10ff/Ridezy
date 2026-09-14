@@ -91,7 +91,9 @@ export const loginUser = async (req, res) => {
       });
     }
 
-    const existingUser = await user.findOne({ email: email.trim().toLowerCase() });
+    const existingUser = await user.findOne({
+      email: email.trim().toLowerCase(),
+    });
 
     if (!existingUser) {
       return res.status(401).json({
@@ -215,4 +217,69 @@ export const getUser = async (req, res) => {
   }
 };
 
-//chamge password logic to be added
+export const updateProfile = async (req, res) => {
+  try {
+    const { firstname, lastname, phone } = req.body;
+
+    if (!firstname || !phone) {
+      return res.status(400).json({
+        message: "First name and phone are required",
+      });
+    }
+
+    if (firstname.trim().length < 3) {
+      return res.status(400).json({
+        message: "First name must be at least 3 characters long",
+      });
+    }
+
+    if (lastname && lastname.trim().length < 3) {
+      return res.status(400).json({
+        message: "Last name must be at least 3 characters long",
+      });
+    }
+
+    const trimmedPhone = phone.trim();
+    if (!/^[0-9]{10}$/.test(trimmedPhone)) {
+      return res.status(400).json({
+        error: "Invalid phone number",
+      });
+    }
+
+    const existingUser = await user.findOne({
+      phone: trimmedPhone,
+      _id: { $ne: req.user._id },
+    });
+
+    if (existingUser) {
+      return res.status(409).json({
+        message: "Phone number is already in use",
+      });
+    }
+
+    req.user.fullname.firstname = firstname.trim();
+    if (lastname != undefined) {
+      req.user.fullname.lastname = lastname.trim();
+    }
+    req.user.phone = trimmedPhone;
+
+    await req.user.save();
+
+    return res.status(200).json({
+      message: "Profile updated successfully",
+      user: {
+        id: req.user._id,
+        fullname: req.user.fullname,
+        email: req.user.email,
+        phone: req.user.phone,
+        role: req.user.role,
+      },
+    });
+  } catch (error) {
+    console.error("Update profile error:", error);
+
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};

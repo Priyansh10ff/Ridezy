@@ -92,6 +92,7 @@ function Login() {
                 name="email"
                 value={form.email}
                 onChange={handleChange}
+                required
                 placeholder="Enter your email"
                 className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-black"
               />
@@ -109,6 +110,7 @@ function Login() {
                 name="password"
                 value={form.password}
                 onChange={handleChange}
+                required
                 placeholder="Enter your password"
                 className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-black"
               />

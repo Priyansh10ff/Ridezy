@@ -5,6 +5,7 @@ import {
   loginUser,
   logoutUser,
   registerUser,
+  updateProfile,
 } from "../controllers/user.controller.js";
 import AuthMiddleware from "../middlewares/auth.middleware.js";
 
@@ -15,5 +16,6 @@ userRoutes.post("/login", loginUser);
 userRoutes.post("/logout", logoutUser);
 userRoutes.get("/me", AuthMiddleware, getUser);
 userRoutes.patch("/change-password", AuthMiddleware, changePassword);
+userRoutes.patch("/profile", AuthMiddleware, updateProfile)
 
 export default userRoutes;

@@ -132,6 +132,7 @@ function Register() {
                 onChange={handleChange}
                 placeholder="Enter your phone number"
                 required
+                pattern = "^[0-9]{10}$"
                 className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-black"
               />
             </div>
